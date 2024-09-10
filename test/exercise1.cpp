@@ -114,6 +114,8 @@ int main()
 				ball3.vy = -20;
 			}
 		}
+
+		
 		//ball3.jump(ball3);
 		
 		ball3.vy += 1;
