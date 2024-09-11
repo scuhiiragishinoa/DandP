@@ -104,22 +104,28 @@ int main() {
 	rect1.getRect(580, 500, 600, 600, 0, 20);
 
 	while (true) {
-		int angle = -45 + rand() % 90;
-		wchar_t s[20];
-		_itow_s(angle, s, 10);
-		outtextxy(170, 180, s);
-
+		outtextxy(230, 400, CharToTCHAR("tap space to start:"));
+		outtextxy(120, 430, CharToTCHAR("Fire the ball to hit the moving block. You have 10 chances"));
+		outtextxy(100, 460, CharToTCHAR("The direction may be unknown but the speed remains unchanged"));
+		fillrectangle(rect1.left, rect1.top, rect1.right, rect1.bottom);
 		wchar_t t[20];
+		wchar_t r[20];
 		_itow_s(hit, t, 10);
+		_itow_s(remain, r, 10);
 		outtextxy(170, 220, CharToTCHAR("the times you have hit it:"));
 		outtextxy(340, 220, t);
-
-		wchar_t r[20];
-		_itow_s(remain, r, 10);
-		outtextxy(170, 260, CharToTCHAR("the shells  remained:"));
+		outtextxy(170, 260, CharToTCHAR("the ball remained:"));
 		outtextxy(340, 260, r);
+		if (_kbhit()) {
+			char input = _getch();
+			if (input == ' ') {
+				break;
+			}
+		}
+	}
 
-
+	while (true) {
+		int update = -45 + rand() % 90;
 
 		rect1.top += rect1.vy;
 		rect1.bottom += rect1.vy;
@@ -142,9 +148,11 @@ int main() {
 		ball.x += ball.vx; 
 		ball.y += ball.vy;
 		ball.vy += g;
+
 		if (ball.x < 600 && ball.y < 800 && status == 1) {
 			status = 1;
 		}
+
 		if (ball.x >= rect1.left - ball.size && ball.y <= rect1.bottom + ball.size && ball.y >= rect1.top - ball.size && ball.y <= rect1.right - ball.size && status == 1) {
 			hit++;
 			status = 0;
@@ -169,12 +177,21 @@ int main() {
 				Sleep(10000000);
 			}
 		}
+
+		wchar_t t[20];
+		wchar_t r[20];
+		_itow_s(hit, t, 10);
+		_itow_s(remain, r, 10);
+		outtextxy(170, 220, CharToTCHAR("the times you have hit it:"));
+		outtextxy(340, 220, t);
+		outtextxy(170, 260, CharToTCHAR("the ball remained:"));
+		outtextxy(340, 260, r);
+
+		outtextxy(2, 450, CharToTCHAR("<-tap space to fire"));
+
 		circle(ball.x, ball.y, ball.size);
 		fillrectangle(rect1.left, rect1.top, rect1.right, rect1.bottom);
 		Sleep(40);
-
-
-
 		cleardevice();
 	}
 	_getch();
