@@ -106,6 +106,18 @@ int main()
 	Rect rect2;
 	rect1.getRect(400, 800, 430, 1000, 20, 0);
 	rect2.getRect(400, 0, 430, 400, 20, 0);
+	while (true) {
+		outtextxy(230, 400, CharToTCHAR("tap space to start:"));
+		fillrectangle(rect1.left, rect1.top, rect1.right, rect1.bottom);
+		fillrectangle(rect2.left, rect2.top, rect2.right, rect2.bottom);
+		fillcircle(ball3.x, ball3.y, ball3.size);
+		if (_kbhit()) {
+			char input = _getch();
+			if (input == ' ') {
+				break;
+			}
+		}
+	}//明天加个难度设置模块
 
 	while (true) {
 		if (_kbhit()) {
@@ -115,7 +127,6 @@ int main()
 			}
 		}
 
-		
 		//ball3.jump(ball3);
 		
 		ball3.vy += 1;
