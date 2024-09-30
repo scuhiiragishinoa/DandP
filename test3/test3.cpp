@@ -1,4 +1,8 @@
-﻿#include<stdio.h>
+﻿/*************************************************************
+ * 代码使用AI工具优化注释和变量名及函数名提高可读性和易维护性*
+ *************************************************************/
+
+#include<stdio.h>
 #include<math.h>   // 数学库，使用y1, y0, yn进行完整的数学计算
 #include<graphics.h>
 #include<conio.h>
@@ -6,6 +10,12 @@
 #include <time.h>
 #include<string.h>
 
+ /*------------------------
+ 游戏逻辑与图形界面作业
+ 使用outtextxy函数打印文本
+ ---------------------------*/
+
+//字符串转化
 TCHAR* CharToTCHAR(const char* pChar)
 {
     TCHAR* pTchar = NULL;
@@ -20,7 +30,7 @@ TCHAR* CharToTCHAR(const char* pChar)
     return pTchar;
 }
 
-// 游戏窗口设置
+// 窗口尺寸
 int WINDOW_WIDTH = 600;
 int WINDOW_HEIGHT = 800;
 
@@ -34,7 +44,7 @@ int total_bricks = 0;                 // 当前砖块数
 // 小球设置
 double ball_x, ball_y;
 int ball_radius = 10;
-double ball_velocity_x = 5, ball_velocity_y = -5; // 小球速度
+double ball_velocity_x = 0.7, ball_velocity_y = -0.6; // 小球初速度
 int missed_count = 0; // 记录遗漏的球数
 
 // 板子设置
@@ -56,13 +66,13 @@ void drawBricks() {
         if (brick_positions[i][2] == 1) {
             int brick_right = brick_positions[i][0] + BRICK_WIDTH;
             int brick_bottom = brick_positions[i][1] + BRICK_HEIGHT;
-            setfillcolor(RGB(100, 100, 100));
+            setfillcolor(RGB(0, 0, 200));
             fillrectangle(brick_positions[i][0], brick_positions[i][1], brick_right, brick_bottom);
         }
     }
     // 绘制遗漏球
     for (int i = 1; i <= 3 - missed_count; i++) {
-        setfillcolor(RED);
+        setfillcolor(RGB(255, 0, 0));
         fillcircle(20 * i, 180, 7);
     }
 }
@@ -83,19 +93,19 @@ void initializeGame() {
     ball_y = paddle_y - ball_radius;
 
     settextstyle(40, 0, _T("Consolas"));
-    settextcolor(RED);
-    outtextxy(200, 300, CharToTCHAR("开始游戏"));
+    settextcolor(RGB(255, 0, 0));
+    outtextxy(200, 300, CharToTCHAR("Start"));
 
     settextstyle(20, 0, _T("Consolas"));
-    outtextxy(200, 400, CharToTCHAR("按空格开始游戏"));
-    outtextxy(200, 450, CharToTCHAR("a：向左，d：向右"));
+    outtextxy(200, 400, CharToTCHAR("tap space to start:"));
+    outtextxy(200, 450, CharToTCHAR("Press 'a''d'to move"));
 
     drawBricks();
 
-    setfillcolor(RED);
+    setfillcolor(RGB(255,0,0));
     fillcircle(ball_x, ball_y, ball_radius);
 
-    setfillcolor(RGB(236, 189, 81));
+    setfillcolor(RGB(0, 189, 0));
     fillrectangle(paddle_x, paddle_y, paddle_x + paddle_width, paddle_y + paddle_height);
 
     char input_char = _getch();
@@ -110,20 +120,17 @@ void initializeGame() {
         ball_x = paddle_x + paddle_width / 2;
 
         cleardevice();
-        settextstyle(40, 0, _T("Consolas"));
-        settextcolor(RED);
-        outtextxy(200, 300, CharToTCHAR("开始游戏"));
 
         settextstyle(20, 0, _T("Consolas"));
-        outtextxy(200, 400, CharToTCHAR("按空格开始游戏"));
-        outtextxy(200, 450, CharToTCHAR("a：向左，d：向右"));
+        outtextxy(200, 400, CharToTCHAR("tap space to start:"));
+        outtextxy(200, 450, CharToTCHAR("Press 'a''d'to move"));
 
         drawBricks();
 
-        setfillcolor(RED);
+        setfillcolor(RGB(255, 0, 0));
         fillcircle(ball_x, ball_y, ball_radius);
 
-        setfillcolor(RGB(236, 189, 81));
+        setfillcolor(RGB(0, 100, 0));
         fillrectangle(paddle_x, paddle_y, paddle_x + paddle_width, paddle_y + paddle_height);
 
         input_char = _getch();
@@ -162,7 +169,7 @@ void drawBonus() {
     if (bonus_color == 0)
         setfillcolor(RGB(236, 189, 81)); // 设置为好物颜色
     if (bonus_color == 1)
-        setfillcolor(RED); // 设置为坏物颜色
+        setfillcolor(RGB(255, 0, 0)); // 设置为坏物颜色
 
     fillcircle(bonus_x, bonus_y, bonus_radius);
 
@@ -217,16 +224,18 @@ void moveBall() {
         }
     }
 
-    // 碰到上边界反弹
-    if (ball_y - ball_radius <= 0)
+    // 碰到上边界反弹///////////////////////////////////修正：增加一条命
+    if (ball_y - ball_radius <= 0) {
         ball_velocity_y = -ball_velocity_y;
-
+        missed_count--;
+        bonus_color = 0;
+    }
     // 检查小球是否掉落
     if (ball_y + ball_radius > WINDOW_HEIGHT) {
         ball_x = paddle_x + paddle_width / 2; // 重置小球位置
         ball_y = paddle_y - ball_radius;
-        ball_velocity_x = 4;
-        ball_velocity_y = -4;
+        ball_velocity_x = 0.6;
+        ball_velocity_y = -0.7;
         missed_count++; // 计数增加
     }
 
@@ -237,7 +246,7 @@ void moveBall() {
     ball_x += ball_velocity_x;
     ball_y += ball_velocity_y;
 
-    setfillcolor(RED);
+    setfillcolor(RGB(255, 0, 0));
     fillcircle(ball_x, ball_y, ball_radius);
 }
 
@@ -265,21 +274,21 @@ bool checkGameOver() {
     if (missed_count >= 3) {
         // 游戏结束界面
         settextstyle(40, 0, _T("Consolas"));
-        settextcolor(RED);
-        outtextxy(200, 300, CharToTCHAR("游戏结束!"));
+        settextcolor(RGB(255, 0, 0));
+        outtextxy(200, 300, CharToTCHAR("GAME OVER!"));
 
         settextstyle(20, 0, _T("Consolas"));
-        outtextxy(200, 400, CharToTCHAR("按任意键退出"));
+        outtextxy(200, 400, CharToTCHAR("Press any key to exit"));
         return true;
     }
     if (total_bricks >= 8 * 5) {
         // 游戏胜利界面
         settextstyle(40, 0, _T("Consolas"));
-        settextcolor(RED);
-        outtextxy(200, 300, CharToTCHAR("恭喜胜利!"));
+        settextcolor(RGB(255, 0, 0));
+        outtextxy(200, 300, CharToTCHAR("YOU WIN!"));
 
         settextstyle(20, 0, _T("Consolas"));
-        outtextxy(200, 400, CharToTCHAR("按任意键退出"));
+        outtextxy(200, 400, CharToTCHAR("Press any key to exit"));
         return true;
     }
 
