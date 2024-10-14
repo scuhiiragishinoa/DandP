@@ -1,8 +1,4 @@
-﻿// bubble.cpp : �������̨Ӧ�ó������ڵ㡣
-//
-
-//#include "stdafx.h"
-#include <conio.h>
+﻿#include <conio.h>
 #include <graphics.h>
 #include <stdlib.h>
 #include <time.h>
@@ -23,6 +19,7 @@ TCHAR* CharToTCHAR(const char* pChar)
 	return pTchar;
 }
 
+//全局变量
 int ballX = 0, ballY = 0;
 int MonsterX = 0, MonsterY = 0, MonsterRadius = 20;
 int windowLength = 850, windowHeight = 850;
@@ -42,9 +39,7 @@ int bonusRadius = 10;
 bool IsGameover = 0;
 bool IsGamewin = 0;
 bool IsMonsterExist = 1;
-double gametime = 1000;
-
-
+double gametime = 3000;
 
 void KeyControl()//键盘控制与位置修正
 {
@@ -128,7 +123,6 @@ void monsterCollide() {
 			}
 		}
 	}
-	
 }
 
 void eating() {
@@ -145,6 +139,7 @@ void bombLaying() {
 		}
 	}
 }
+
 void bombing() {
 	if (IsBombing) {
 		bombingValue += speed;
@@ -204,7 +199,7 @@ void DrawMap()
 void DrawBonus() {
 	for (i = 0; i < 17; i++) {
 		for (j = 0; j < 17; j++) {
-			if (Box[i][j][2]) {
+			if ((i + j) % 2 != 0 && Box[i][j][2]) {
 				setfillcolor(YELLOW);
 				fillcircle(i * 50 + 25, j * 50 + 25, bonusRadius);
 			}
@@ -276,7 +271,7 @@ int main()
 	while (true) {
 		DrawBonus();
 		DrawMap();  //  create map
-		gametime -= 0.2;
+		gametime -= 1;
 
 		if (_kbhit())
 			KeyControl();
@@ -302,7 +297,6 @@ int main()
 		fillrectangle(bombx - 25, bomby - bombingValue, bombx + 25, bomby + bombingValue);
 
 		eatBonus();
-
 		settextstyle(40, 0, _T("Consolas"));
 		settextcolor(RGB(255, 0, 0));
 		wchar_t t[20];
@@ -314,18 +308,18 @@ int main()
 			settextstyle(40, 0, _T("Consolas"));
 			settextcolor(RGB(255, 0, 0));
 			outtextxy(400, 400, CharToTCHAR("GameOver"));
-			outtextxy(300, 500, CharToTCHAR("press any key to continue"));
+			outtextxy(300, 500, CharToTCHAR("wait to continue"));
 			FlushBatchDraw(); 
-			Sleep(300);
+			Sleep(800);
 			break;
 		}
 		if (IsGamewin) {
 			settextstyle(40, 0, _T("Consolas"));
 			settextcolor(RGB(255, 0, 0));
 			outtextxy(400, 400, CharToTCHAR("You Win!"));
-			outtextxy(300, 500, CharToTCHAR("press any key to continue"));
+			outtextxy(300, 500, CharToTCHAR("wait to continue"));
 			FlushBatchDraw();
-			Sleep(300);
+			Sleep(800);
 			break;
 		}
 		FlushBatchDraw();
@@ -337,4 +331,3 @@ int main()
 	closegraph();
 	return 0;
 }
-
