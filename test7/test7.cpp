@@ -8,6 +8,21 @@
 #define HEIGHT 800
 #define	 MaxBulletNum 200
 
+//字符串转化
+TCHAR* CharToTCHAR(const char* pChar)
+{
+	TCHAR* pTchar = NULL;
+	int nLen = strlen(pChar) + 1;
+#ifdef _UNICODE
+	pTchar = new wchar_t[nLen];
+	MultiByteToWideChar(CP_ACP, 0, pChar, nLen, pTchar, nLen);
+#else
+	pTchar = new char[nLen];
+	wcsncp(pTChar, pChar, nLen * sizeof(char));
+#endif
+	return pTchar;
+}
+
 
 class Rocket  // define rocket
 {
