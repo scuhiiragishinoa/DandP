@@ -24,10 +24,22 @@ int mapIndex[rows * cols] =
 0, 2, 0, 3, 3, 3, 3, 3, 3, 1,
 2, 0, 3, 3, 3, 3, 3, 3, 3, 3 };
 
+int sceneIndex[rows * cols] =
+{ 0, 2, 2, 0, 2, 0, 1, 0, 1, 1,
+0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+0, 0, 0, 0, 0, 0, 1, 0, 1, 0,
+0, 0, 1, 0, 1, 0, 0, 0, 2, 0,
+2, 2, 0, 0, 1, 0, 0, 0, 0, 2,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 1, 0, 0, 0, 0, 0, 1, 0,
+0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
+1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+2, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
 
 int main()
 {
-	IMAGE im_bk, map[4], items[4];
+	IMAGE im_bk, map[4], scene[2];
 	initgraph(WIDTH, HEIGHT);
 
 	int i, x, y;
@@ -41,8 +53,10 @@ int main()
 	loadimage(&map[1], _T("sources\\Map\\map1.png"));
 	loadimage(&map[2], _T("sources\\Map\\map2.png"));
 	loadimage(&map[3], _T("sources\\Map\\map3.png"));
-	loadimage(&items[1], _T("sources\\Map\\scene1.png"));
-	loadimage(&items[2], _T("sources\\Map\\scene2.png"));
+
+	loadimage(&scene[0], _T("sources\\Map\\scene1.png"));
+	loadimage(&scene[1], _T("sources\\Map\\scene2.png"));
+
 
 	putimage(0, 0, &im_bk);
 
@@ -56,12 +70,11 @@ int main()
 
 		putimagePng(x, y, &map[mapIndex[i]]);
 
-		if (mapIndex[i] == 1) {
-			putimagePng(x, y-35, &items[mapIndex[i]]);
-		}
-		if (mapIndex[i] == 2) {
-			putimagePng(x, y-35, &items[mapIndex[i]]);
-		}
+		if (sceneIndex[i] == 1)
+			putimagePng(x + 7, y - 44, &scene[0]);
+		else if (sceneIndex[i] == 2)
+			putimagePng(x + 7, y - 30, &scene[1]);
+
 	}
 
 	_getch();
