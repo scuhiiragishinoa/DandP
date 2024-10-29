@@ -1,70 +1,71 @@
-﻿
-#include <stdio.h>
-#include <graphics.h>
-#include "conio.h"
+﻿#include <graphics.h>  
+#include <conio.h>
 #include "EasyXPng.h"
+#define  WIDTH 800  
+#define  HEIGHT 600
 
-#define WIDTH  640
-#define HEIGHT 400
+class Player
+{
+public:
+	IMAGE im_show;
+	float width, height;
 
-const int rows = 10, cols = 10;
+	void draw()	
+	{
+		putimagePng(WIDTH / 2, HEIGHT / 2 - height, &im_show);
+	}
 
-int rowNum, colNum;
+	void initialize()
+	{
+		loadimage(&im_show, _T("standright.png"));
+		width = im_show.getwidth();
+		height = im_show.getheight();
+	}
+};
 
+IMAGE im_land;
+IMAGE im_bk;
+Player player;
 
-int mapIndex[rows * cols] =
-{ 2, 2, 2, 2, 2, 0, 1, 0, 1, 0,
-3, 3, 2, 2, 0, 0, 0, 1, 1, 0,
-3, 0, 0, 0, 0, 0, 0, 0, 1, 2,
-2, 2, 0, 0, 0, 0, 0, 2, 2, 2,
-2, 2, 0, 0, 0, 0, 2, 2, 2, 2,
-2, 2, 0, 0, 0, 2, 2, 0, 0, 2,
-2, 0, 0, 2, 2, 2, 0, 0, 1, 0,
-0, 0, 2, 0, 0, 0, 1, 1, 1, 1,
-0, 2, 0, 3, 3, 3, 3, 3, 3, 1,
-2, 0, 3, 3, 3, 3, 3, 3, 3, 3 };
+void startup()
+{
+	player.initialize();
+	loadimage(&im_land, _T("land.png"));
+	loadimage(&im_bk, _T("landscape1.png"));
 
+	initgraph(WIDTH, HEIGHT);
+	BeginBatchDraw();
+}
+
+void show()
+{
+	putimage(-100, -100, &im_bk);
+	putimage(WIDTH / 2, HEIGHT / 2, &im_land);
+	player.draw();
+	FlushBatchDraw();
+}
+
+void updateWithoutInput()
+{
+
+}
+
+void updateWithInput()
+{
+	if (kbhit())
+	{
+
+	}
+}
 
 int main()
 {
-	IMAGE im_bk, map[4], items[4];
-	initgraph(WIDTH, HEIGHT);
-
-	int i, x, y;
-
-	int xstart, ystart;
-	xstart = 32 * (rows - 1);
-	ystart = 0;
-
-	loadimage(&im_bk, _T("sources\\Map\\bg.bmp"));
-	loadimage(&map[0], _T("sources\\Map\\map0.png"));
-	loadimage(&map[1], _T("sources\\Map\\map1.png"));
-	loadimage(&map[2], _T("sources\\Map\\map2.png"));
-	loadimage(&map[3], _T("sources\\Map\\map3.png"));
-	loadimage(&items[1], _T("sources\\Map\\scene1.png"));
-	loadimage(&items[2], _T("sources\\Map\\scene2.png"));
-
-	putimage(0, 0, &im_bk);
-
-	for (i = 0; i < rows * cols; i++)
+	startup();
+	while (1)
 	{
-
-		rowNum = i / cols;
-		colNum = i % cols;
-		x = xstart + colNum * 32 + rowNum * (-32);
-		y = ystart + rowNum * 16 + colNum * 16;
-
-		putimagePng(x, y, &map[mapIndex[i]]);
-
-		if (mapIndex[i] == 1) {
-			putimagePng(x, y-35, &items[mapIndex[i]]);
-		}
-		if (mapIndex[i] == 2) {
-			putimagePng(x, y-35, &items[mapIndex[i]]);
-		}
+		show();
+		updateWithoutInput();
+		updateWithInput();
 	}
-
-	_getch();
 	return 0;
 }
-
